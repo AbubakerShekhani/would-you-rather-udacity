@@ -1,4 +1,5 @@
 import { _saveQuestion, _getQuestions, _saveQuestionAnswer } from '../utils/_DATA'
+import { handleReceiveUsers } from './users'
 
 export const RECEIVE_QUESTIONS = 'RECEIVE_QUESTIONS'
 export const ADD_QUESTION = 'ADD_QUESTION'
@@ -30,5 +31,16 @@ export function handleGetQuestions() {
         return _getQuestions()
             .then((questions) =>
                 dispatch(receiveQuestions(questions)))
+    }
+}
+
+export function handleSaveQuestionAnswer(userAnswer) {
+    return (dispatch) => {
+        return _saveQuestionAnswer(userAnswer)
+            .then(() => {
+                dispatch(handleReceiveUsers())
+                dispatch(handleGetQuestions()) }
+                )
+
     }
 }
