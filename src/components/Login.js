@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
 import { handleReceiveUsers } from '../actions/users'
 import { loginUser } from '../actions/authentication'
 import { handleGetQuestions } from '../actions/questions'
@@ -41,14 +42,13 @@ class Login extends Component {
 
     render() {
 
-        if (this.props.authenticated) {
-            console.log('Logged In. Redirect to Dashboard')
+        const authedUser = this.props.authenticated
+
+        if (authedUser) {
+           return  <Redirect to="/" />
         }
 
         const { users, questions } = this.props;
-
-
-        const authedUser = this.props.authenticated
 
         console.log(questions)
 
@@ -56,31 +56,41 @@ class Login extends Component {
 
         return (
 
-            <div className="container">
-                <p>
-                    Welcome to the "Would You Rather App"
-                </p>
+            <div className="ui container">
+                <div className="ui grid center aligned">
+                    <div className="ui row center aligned">
+                        <div className="wide column">
+                            <h1>
+                                Welcome to the "Would You Rather App"
+                            </h1>
+                        </div>
+                    </div>
+                </div>
 
                 {
-                (authedUser) ? <div>Signed in as {authedUser} .
 
-                </div>
-                :
-                    <div>
-                        <p>
-                            Please sign in to continue
-                        </p>
-                        <form onSubmit={this.onFormSubmit.bind(this)}>
-                            <select onChange={this.onSelectUserForLogin}>
-                                <option value="" key="0">Select</option>
-                                {
-                                    Object.values(users).map((user) =>
-                                        <option value={user.id} key={user.id}>{user.name}</option>
-                                    )
-                                }
-                            </select>
-                            <button type="submit" disabled={!this.state.user}>Submit</button>
-                        </form>
+                    <div className="ui grid center aligned ">
+                        <div className="ui center aligned row">
+                            <div className="eleven wide column">
+                                <div className="search-bar ui segment">
+
+                                    <p>
+                                        Please sign in to continue
+                                    </p>
+                                    <form onSubmit={this.onFormSubmit.bind(this)}>
+                                    <select onChange={this.onSelectUserForLogin}>
+                                        <option value="" key="0">Select</option>
+                                        {
+                                            Object.values(users).map((user) =>
+                                                <option value={user.id} key={user.id}>{user.name}</option>
+                                            )
+                                        }
+                                    </select>
+                                    <button type="submit" disabled={!this.state.user}>Submit</button>
+                                </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 }
             </div>
