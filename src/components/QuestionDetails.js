@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { handleSaveQuestionAnswer, handleGetQuestions } from '../actions/questions'
 import { Redirect } from 'react-router-dom'
 import { handleReceiveUsers } from '../actions/users'
+import PollResult from './PollResult'
 
 class QuestionDetails extends Component {
 
@@ -44,7 +45,7 @@ class QuestionDetails extends Component {
 
   render() {
 
-    const { question, users, answered, totalVotes, authenticated } = this.props
+    const { question, users, answered, authenticated } = this.props
 
     if (!authenticated) {
       return  <Redirect to="/" />
@@ -107,32 +108,7 @@ class QuestionDetails extends Component {
                 </div>
               </form>
               :
-              /* UnAnwswered */
-              <div className="ui centered card">
-                <div className="content">
-                  <div className="right floated meta"></div>
-                  <img className="ui avatar image" src={users[question.author].avatarURL} alt={question.author} /> {question.author} asks
-                </div>
-                <div className="image">
-                  <img />
-                </div>
-                <div className="content">
-                    <a className="header">Poll Results</a>
-                    <div className="meta">
-                    </div>
-                    <div className="description">
-                      <div><strong>Option 1:</strong> {question.optionOne.text} { (question.optionOne.votes.includes(authenticated)) ? (<i class="yellow star icon"></i>) : '' }</div>
-                      <div><strong>Votes</strong>: {question.optionOne.votes.length} / {totalVotes} : { Math.round((question.optionOne.votes.length/totalVotes)*100) }%
-                      </div>
-
-
-                      <div><strong>Option 2:</strong> {question.optionTwo.text}  { (question.optionTwo.votes.includes(authenticated)) ? (<i class="yellow star icon"></i>) : '' } </div>
-                        <div><strong>Votes</strong>: {question.optionTwo.votes.length} / {totalVotes} : { Math.round((question.optionTwo.votes.length/totalVotes)*100) }%
-
-                      </div>
-                    </div>
-                  </div>
-              </div>
+                <PollResult question={question} />
               }
               </div>
             </div>
@@ -151,14 +127,13 @@ function mapStateToProps({users, authentication, questions}, ownProps) {
       questions,
       question: null,
       answered: null,
-      totalVotes:null
     }
   }
 
 
   const answered = (question.optionOne.votes.includes(authentication)
                   || question.optionTwo.votes.includes(authentication)) ? true : false
-  const totalVotes    =  question.optionOne.votes.length + question.optionTwo.votes.length
+
 
   return {
       users,
@@ -166,7 +141,6 @@ function mapStateToProps({users, authentication, questions}, ownProps) {
       questions,
       question,
       answered,
-      totalVotes
   }
 }
 
