@@ -25,7 +25,7 @@ class Leaderboard extends Component {
                 <div className="ui items">
 
                   { userScores.map((user) =>
-                    <div className="item">
+                    <div className="item" key={user.id}>
                       <div className="ui small image">
                         <img src={user.avatarURL} alt={user.id} />
                       </div>

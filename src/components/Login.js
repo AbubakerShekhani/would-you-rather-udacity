@@ -15,7 +15,7 @@ class Login extends Component {
 
     componentDidMount() {
 
-
+        this.props.dispatch(handleGetQuestions())
         this.props.dispatch(handleReceiveUsers())
     }
 
@@ -68,7 +68,7 @@ class Login extends Component {
                 </div>
 
                 {
-
+                        /*
                     <div className="ui grid center aligned ">
                         <div className="ui center aligned row">
                             <div className="eleven wide column">
@@ -86,13 +86,50 @@ class Login extends Component {
                                             )
                                         }
                                     </select>
-                                    <button type="submit" disabled={!this.state.user}>Submit</button>
+                                    <button className="ui primary button" type="submit" disabled={!this.state.user}>Submit</button>
                                 </form>
                                 </div>
                             </div>
                         </div>
                     </div>
-                }
+                */
+
+                    <div className="ui middle aligned center aligned grid">
+
+                            <div className="eight wide column">
+                                <h2 className="ui teal image header">
+                                <div className="content">
+                                    Please login to continue
+                                </div>
+                            </h2>
+                            <form onSubmit={this.onFormSubmit.bind(this)} className="ui large form">
+                                <div className="ui stacked segment">
+
+                                <div className="field">
+                                    <div className="ui left icon input">
+                                        <select onChange={this.onSelectUserForLogin}>
+                                            <option value="" key="0">Select</option>
+                                            {
+                                                Object.values(users).map((user) =>
+                                                    <option value={user.id} key={user.id}>{user.name}</option>
+                                                )
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <button className="ui primary button" type="submit" disabled={!this.state.user}>Login</button>
+                            </div>
+
+                                <div className="ui error message"></div>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+                                    }
+
+
             </div>
         )
     }

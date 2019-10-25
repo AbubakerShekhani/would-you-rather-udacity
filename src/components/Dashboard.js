@@ -10,9 +10,18 @@ class Dashboard extends Component {
     render() {
         return (
             <div className="ui container">
-                <div className="ui grid center aligned">
+                 <div className="ui grid center aligned">
                     <div className="ui row center aligned">
                         <div className="wide column">
+                            <h1>
+                                Welcome to the "Would You Rather App"
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+                <div className="ui grid centered">
+                    <div className="ui row">
+                        <div className="eight wide column">
                             <QuestionList />
                         </div>
                     </div>
