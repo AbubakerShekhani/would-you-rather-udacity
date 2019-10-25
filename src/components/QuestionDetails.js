@@ -1,17 +1,22 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { handleSaveQuestionAnswer } from '../actions/questions'
+import { handleSaveQuestionAnswer, handleGetQuestions } from '../actions/questions'
+import { Redirect } from 'react-router-dom'
+import { handleReceiveUsers } from '../actions/users'
 
 class QuestionDetails extends Component {
 
   constructor(props) {
     super(props)
     this.state = { selectedAnswer: null }
+    this.props.dispatch(handleGetQuestions())
+    this.props.dispatch(handleReceiveUsers())
   }
 
 
   componentDidMount() {
-
+    this.props.dispatch(handleGetQuestions())
+    this.props.dispatch(handleReceiveUsers())
   }
 
   handleOptionChange = changeEvent => {
@@ -33,21 +38,30 @@ class QuestionDetails extends Component {
 
     this.props.dispatch(handleSaveQuestionAnswer(userAnswer))
 
+    console.log("hls")
+
   }
 
   render() {
 
     const { question, users, answered, totalVotes, authenticated } = this.props
 
-    console.log(totalVotes)
+    if (!authenticated) {
+      return  <Redirect to="/" />
+    }
+
+    if (question === null) {
+      return <Redirect to="/ErrorPage" />
+    }
 
     return (
-            <div>
+            <div className="ui centered grid">
+              <div className="eight wide column">
               { (!answered) ?
                 <form onSubmit={this.handleFormSubmit}>
-                <div className="ui card">
+                <div className="ui centered card">
                   <div className="content">
-                    <div className="right floated meta">14h</div>
+                    <div className="right floated meta"></div>
                     <img className="ui avatar image" src={users[question.author].avatarURL} alt={question.author} /> {question.author} asks
                   </div>
                   <div className="image">
@@ -88,17 +102,15 @@ class QuestionDetails extends Component {
                     </div>
                   </div>
                   <div className="extra content right aligned">
-                    <button type="submit">
-                      Vote
-                    </button>
+                  <button className="positive ui button" type="submit">Vote</button>
                   </div>
                 </div>
               </form>
               :
               /* UnAnwswered */
-              <div className="ui card">
+              <div className="ui centered card">
                 <div className="content">
-                  <div className="right floated meta">14h</div>
+                  <div className="right floated meta"></div>
                   <img className="ui avatar image" src={users[question.author].avatarURL} alt={question.author} /> {question.author} asks
                 </div>
                 <div className="image">
@@ -109,18 +121,20 @@ class QuestionDetails extends Component {
                     <div className="meta">
                     </div>
                     <div className="description">
-                      <div>Option 1: {question.optionOne.text} -
-                        Votes: {question.optionOne.votes.length}
+                      <div><strong>Option 1:</strong> {question.optionOne.text} { (question.optionOne.votes.includes(authenticated)) ? (<i class="yellow star icon"></i>) : '' }</div>
+                      <div><strong>Votes</strong>: {question.optionOne.votes.length} / {totalVotes} : { Math.round((question.optionOne.votes.length/totalVotes)*100) }%
                       </div>
-                        { (question.optionOne.votes.includes(authenticated)) ? (<div>*You Voted*</div>) : '' }
-                      <div>Option 2: {question.optionTwo.text} -
-                        Votes: {question.optionTwo.votes.length}
-                        { (question.optionTwo.votes.includes(authenticated)) ? (<div>*You Voted*</div>) : '' }
+
+
+                      <div><strong>Option 2:</strong> {question.optionTwo.text}  { (question.optionTwo.votes.includes(authenticated)) ? (<i class="yellow star icon"></i>) : '' } </div>
+                        <div><strong>Votes</strong>: {question.optionTwo.votes.length} / {totalVotes} : { Math.round((question.optionTwo.votes.length/totalVotes)*100) }%
+
                       </div>
                     </div>
                   </div>
               </div>
               }
+              </div>
             </div>
           );
   }
@@ -129,6 +143,19 @@ class QuestionDetails extends Component {
 function mapStateToProps({users, authentication, questions}, ownProps) {
 
   const question = questions[ownProps.match.params.id]
+
+  if (!question) {
+    return {
+      users,
+      authenticated: authentication,
+      questions,
+      question: null,
+      answered: null,
+      totalVotes:null
+    }
+  }
+
+
   const answered = (question.optionOne.votes.includes(authentication)
                   || question.optionTwo.votes.includes(authentication)) ? true : false
   const totalVotes    =  question.optionOne.votes.length + question.optionTwo.votes.length
