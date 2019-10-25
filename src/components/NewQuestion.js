@@ -43,16 +43,12 @@ class NewQuestion extends Component {
         <div className="ui grid center aligned">
           <div className="ui row center aligned">
             <div className="eight wide column">
-              <br />
-              <br />
-              <br />
-              <br />
               <h2>Post a Poll</h2>
               <form className="ui large form" onSubmit={this.handleFormSubmit}>
                 <div className="ui stacked segment">
                   <div className="field">
-                    <div class="ui left labeled input">
-                      <label for="optionOne" class="ui label">
+                    <div className="ui left labeled input">
+                      <label className="ui label">
                         Option 1
                       </label>
                       <input
@@ -66,8 +62,8 @@ class NewQuestion extends Component {
                     </div>
                   </div>
                   <div className="field">
-                    <div class="ui left labeled input">
-                      <label for="optionTwo" class="ui label">
+                    <div className="ui left labeled input">
+                      <label className="ui label">
                         Option 2
                       </label>
                       <input
@@ -81,8 +77,8 @@ class NewQuestion extends Component {
                     </div>
                   </div>
                   <div className="field">
-                    <div class="ui left labeled input"></div>
-                    <button class="positive ui button">Submit</button>
+                    <div className="ui left labeled input"></div>
+                    <button className="positive ui button">Submit</button>
                   </div>
                 </div>
               </form>
