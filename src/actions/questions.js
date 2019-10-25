@@ -34,6 +34,18 @@ export function handleGetQuestions() {
     }
 }
 
+export function handleAddQuestion(question) {
+    return (dispatch) => {
+        return _saveQuestion(question)
+            .then(()=> {
+                dispatch(handleReceiveUsers())
+                dispatch(handleGetQuestions())
+            }
+
+        )
+    }
+}
+
 export function handleSaveQuestionAnswer(userAnswer) {
     return (dispatch) => {
         return _saveQuestionAnswer(userAnswer)
